@@ -1,0 +1,16 @@
+[build-system]
+requires = ["flit_core >=3.2,<4","pydantic>=2.6.4","numpy>=1.26.4","py-jsonic==0.0.2"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "LVLUP"
+authors = [{name = "LuTze"}]
+description = "This repo maintains all the objects and functions needed for DnD5e character sheet maintanance."
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+version = "0.0.0"
+dependencies = ["pydantic>=2.6.4","numpy>=1.26.4","py-jsonic==0.0.2"]
+
+[project.urls]
+Home = "https://github.com/Ellutze/LVLUP"

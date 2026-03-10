@@ -1,0 +1,48 @@
+
+from pydantic import BaseModel, Field, ConfigDict, ValidationError, SerializeAsAny
+import numpy as np
+from typing import List, Optional, Tuple, Union, Annotated, Any
+from datetime import date, time, timedelta
+
+class Subclass(BaseModel):
+
+    
+    name: str = Field(default="NameMeGoddammit")
+    #DnD class that this subclass belongs to
+    _class: str = Field(default="")
+    #list of 20 levels 
+    levels: list = Field(default_factory=lambda: [Level() for _ in range(20)])
+    #there are 9 spell levels, so 9 lists of available spells
+    spells: list = Field(default_factory=lambda: [[] for _ in range(9)])
+
+class Level(BaseModel):
+
+    levels: list[Upgrade] = Field(default_factory=list)
+
+
+class Upgrade(BaseModel):
+
+    text: str = Field(default="")
+    #armour class
+    AC: int = Field(default=0)
+    #spell slots
+    SS: Annotated[np.ndarray, Field(default_factory=lambda: np.zeros((1, 9)))]
+    #spells learned --- note 0 = cantrip, technically 10 levels
+    SL: Annotated[np.ndarray, Field(default_factory=lambda: np.zeros((1, 10)))]
+    #extra hit points, above hit-dice based upgrade
+    HP: int = Field(default=0)
+    profOptions: list[ProfOptions] = Field(default=[])
+    profGiven: list[str] = Field(default=None)
+    
+
+class Feat(Upgrade):
+
+    improveAbility: float = Field(default=0)
+    #order ==> str, dex, cons, wis, int, cha
+    #True values allow this selection
+    selectionAbility: list = Field(default= [False for _ in range(6)])
+    
+class ProfOptions(BaseModel):
+
+    selection: list[str] = Field(default=[])
+    number: int = Field(default=0)
