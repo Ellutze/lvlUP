@@ -33,6 +33,34 @@ class Upgrade(BaseModel):
     HP: int = Field(default=0)
     profOptions: list[ProfOptions] = Field(default=[])
     profGiven: list[str] = Field(default=None)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 class Feat(Upgrade):
