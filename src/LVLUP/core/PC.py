@@ -2,8 +2,9 @@
 
 from pydantic import BaseModel, Field, ConfigDict, ValidationError, SerializeAsAny
 import numpy as np
-from typing import List, Optional, Tuple, Union, Annotated, Any
+from typing import List, Optional, Tuple, Union, Annotated, Any, Literal
 from datetime import date, time, timedelta
+from other import Specie, Item, NPC, Prof
 
 
 
@@ -42,100 +43,137 @@ class Res(BaseModel):
 
     #
 
+class Action(BaseModel):
+
+    name: Optional[str] = Field(default=None)
+    text: Optional[str] = Field(default=None)
+    #a = action , ba = bonus action, a_ba is either action or bonus action, u = unique resource, r = reaction
+    action_type: Optional[Literal["a", "ba", "a_ba","u","r"]] = Field(default=None)
+    range: Optional[float] = Field(default=None)
+    #Resource recovery
+    RR: Optional[Literal["short rest","long rest"]] = Field(default=None)
+
+class Passive(BaseModel):
+
+    name: Optional[str] = Field(default=None)
+    text: Optional[str] = Field(default=None)
+
+class ExtraActions(BaseModel):
+
+    #unique resource amount required
+    ura = Optional[int] = Field(default=0)
+
+class ExtraPassives(Passive):
+
+    #Conditions under which this applies
+    condition = Optional[str] = Field(default=None)
+
+
 class Profs(BaseModel):
     
     #Boolean only here
 
     #Weapons
-    battleaxe: bool = Field(default=False)
-    dagger: bool = Field(default=False)
-    dart: bool = Field(default=False)
-    flail: bool = Field(default=False)
-    glaive: bool = Field(default=False)
-    greatsword: bool = Field(default=False)
-    halberd: bool = Field(default=False)
-    #one handed
-    crossbow_OH: bool = Field(default=False)
-    #two handed
-    crossbow_TH: bool = Field(default=False)
-    shortsword: bool = Field(default=False)
-    shortbow: bool = Field(default=False)
-    longbow: bool = Field(default=False)
-    imporov_weapon: bool = Field(default=False)
-    javelin: bool = Field(default=False)
-    mace: bool = Field(default=False)
-    maul: bool = Field(default=False)
-    morningstar: bool = Field(default=False)
-    pistol: bool = Field(default=False)
-    quarterstaff: bool = Field(default=False)
-    rapier: bool = Field(default=False)
-    scimitar: bool = Field(default=False)
-    shield: bool = Field(default=False)
-    spear: bool = Field(default=False)
-    unarmed: bool = Field(default=False)
-    
+    battleaxe: Prof = Field(default=Prof(name="battleaxe"))
+    dagger: Prof = Field(default=Prof(name="dagger"))
+    dart: Prof = Field(default=Prof(name="dart"))
+    flail: Prof = Field(default=Prof(name="flail"))
+    glaive: Prof = Field(default=Prof(name="glaive"))
+    greatsword: Prof = Field(default=Prof(name="greatsword"))
+    halberd: Prof = Field(default=Prof(name="halberd"))
 
+    # one handed
+    crossbow_OH: Prof = Field(default=Prof(name="crossbow_OH"))
 
-    #Instruments
-    #TODO 
+    # two handed
+    crossbow_TH: Prof = Field(default=Prof(name="crossbow_TH"))
 
-    #Languages 
-    #TODO
+    shortsword: Prof = Field(default=Prof(name="shortsword"))
+    shortbow: Prof = Field(default=Prof(name="shortbow"))
+    longbow: Prof = Field(default=Prof(name="longbow"))
+    imporov_weapon: Prof = Field(default=Prof(name="imporov_weapon"))
+    javelin: Prof = Field(default=Prof(name="javelin"))
+    mace: Prof = Field(default=Prof(name="mace"))
+    maul: Prof = Field(default=Prof(name="maul"))
+    morningstar: Prof = Field(default=Prof(name="morningstar"))
+    pistol: Prof = Field(default=Prof(name="pistol"))
+    quarterstaff: Prof = Field(default=Prof(name="quarterstaff"))
+    rapier: Prof = Field(default=Prof(name="rapier"))
+    scimitar: Prof = Field(default=Prof(name="scimitar"))
+    shield: Prof = Field(default=Prof(name="shield"))
+    spear: Prof = Field(default=Prof(name="spear"))
+    unarmed: Prof = Field(default=Prof(name="unarmed"))
 
-    #Armour
-    heavy: bool = Field(default=False)
-    medium: bool = Field(default=False)
-    light: bool = Field(default=False)
+    # Instruments
+    lute: Prof = Field(default=Prof(name="lute"))
+    flute: Prof = Field(default=Prof(name="flute"))
+    drum: Prof = Field(default=Prof(name="drum"))
+    lyre: Prof = Field(default=Prof(name="lyre"))
+    horn: Prof = Field(default=Prof(name="horn"))
+    bagpipes: Prof = Field(default=Prof(name="bagpipes"))
 
-    #Saving throws
-    STwis: bool = Field(default=False)
-    STcha: bool = Field(default=False)
-    STstr : bool = Field(default=False)
-    STdex: bool = Field(default=False)
-    STint : bool = Field(default=False)
-    STcon: bool = Field(default=False)
+    # Languages
+    common: Prof = Field(default=Prof(name="common"))
+    elvish: Prof = Field(default=Prof(name="elvish"))
+    dwarvish: Prof = Field(default=Prof(name="dwarvish"))
+    orc: Prof = Field(default=Prof(name="orc"))
+    goblin: Prof = Field(default=Prof(name="goblin"))
+    draconic: Prof = Field(default=Prof(name="draconic"))
+    infernal: Prof = Field(default=Prof(name="infernal"))
+    celestial: Prof = Field(default=Prof(name="celestial"))
 
-    #skills int
-    history: bool = Field(default=False)
-    arcana: bool = Field(default=False)
-    investigation: bool = Field(default=False)
-    history: bool = Field(default=False)
+    # Armour
+    heavy: Prof = Field(default=Prof(name="heavy"))
+    medium: Prof = Field(default=Prof(name="medium"))
+    light: Prof = Field(default=Prof(name="light"))
 
-    #wis skills
-    medicine: bool = Field(default=False)
-    survival: bool = Field(default=False)
-    religion: bool = Field(default=False)
-    insight : bool = Field(default=False)
-    nature: bool = Field(default=False)
-    perception: bool = Field(default=False)
-    #animal handling
-    AH: bool = Field(default=False)
+    # Saving throws
+    STwis: Prof = Field(default=Prof(name="STwis"))
+    STcha: Prof = Field(default=Prof(name="STcha"))
+    STstr: Prof = Field(default=Prof(name="STstr"))
+    STdex: Prof = Field(default=Prof(name="STdex"))
+    STint: Prof = Field(default=Prof(name="STint"))
+    STcon: Prof = Field(default=Prof(name="STcon"))
 
-    #str skills
-    athletics: bool = Field(default=False)
-    history: bool = Field(default=False)
-    history: bool = Field(default=False)
-    history: bool = Field(default=False)
+    # skills int
+    history: Prof = Field(default=Prof(name="history"))
+    arcana: Prof = Field(default=Prof(name="arcana"))
+    investigation: Prof = Field(default=Prof(name="investigation"))
 
-    #dex skills
-    #sleight of hand
-    SOH: bool = Field(default=False)
-    acrobatics: bool = Field(default=False)
-    stealth: bool = Field(default=False)
+    # wis skills
+    medicine: Prof = Field(default=Prof(name="medicine"))
+    survival: Prof = Field(default=Prof(name="survival"))
+    religion: Prof = Field(default=Prof(name="religion"))
+    insight: Prof = Field(default=Prof(name="insight"))
+    nature: Prof = Field(default=Prof(name="nature"))
+    perception: Prof = Field(default=Prof(name="perception"))
 
-    #cha skills
-    persuation: bool = Field(default=False)
-    deception: bool = Field(default=False)
-    intimiddation: bool = Field(default=False)
-    history: bool = Field(default=False)
+    # animal handling
+    AH: Prof = Field(default=Prof(name="AH"))
 
-    #kits
-    #medkit
-    MK: bool = Field(default=False)
-    #thieves tools
-    TT: bool = Field(default=False)
-    #poisoners kit
-    PK: bool = Field(default=False)
+    # str skills
+    athletics: Prof = Field(default=Prof(name="athletics"))
+
+    # dex skills
+    # sleight of hand
+    SOH: Prof = Field(default=Prof(name="SOH"))
+    acrobatics: Prof = Field(default=Prof(name="acrobatics"))
+    stealth: Prof = Field(default=Prof(name="stealth"))
+
+    # cha skills
+    persuation: Prof = Field(default=Prof(name="persuation"))
+    deception: Prof = Field(default=Prof(name="deception"))
+    intimiddation: Prof = Field(default=Prof(name="intimiddation"))
+
+    # kits
+    # medkit
+    MK: Prof = Field(default=Prof(name="MK"))
+
+    # thieves tools
+    TT: Prof = Field(default=Prof(name="TT"))
+
+    # poisoners kit
+    PK: Prof = Field(default=Prof(name="PK"))
 
 
 class PC(BaseModel):
@@ -144,6 +182,10 @@ class PC(BaseModel):
     AS: Optional['AbilityScore'] = Field(default=AbilityScore())
     lvl: int = Field(default=1)
     specie: Specie = Field(default=Specie())
+    #armour class
+    AC: float = Field(default=10)
+
+    XP: float = Field(default=0)
 
     #allow for multiclass by having list  subclasses
     #classes are implicit - subclasses is what matters
@@ -155,12 +197,15 @@ class PC(BaseModel):
 
     resources: Res = Field(default=Res())
 
+    actions: Res = Field(default=Action)
+    passives: Res = Field(default=Passive)
+
     items: list['Item'] = Field(default=0)
 
-class Item(BaseModel):
+    notes: str = Field(default="")
+    followers: list[NPC] = Field(default_factory=list)
 
-    #Items are either equiped (default items rady at hand), or not ==> stashed in backpack - at least action to take out
-    equiped: bool = Field(default=False)
+
 
 
 

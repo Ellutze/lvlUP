@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, ConfigDict, ValidationError, SerializeAsA
 import numpy as np
 from typing import List, Optional, Tuple, Union, Annotated, Any
 from datetime import date, time, timedelta
+from PC import Item
 
 class Subclass(BaseModel):
 
@@ -33,6 +34,13 @@ class Upgrade(BaseModel):
     HP: int = Field(default=0)
     profOptions: list[ProfOptions] = Field(default=[])
     profGiven: list[str] = Field(default=None)
+
+    items: list[Item] = Field(default=[])
+    newCantrips: int = Field(default=0)
+    newSpells: int = Field(default=0)
+    selectProfs: int = Field(default=0)
+
+
 
 
 

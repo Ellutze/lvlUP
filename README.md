@@ -23,3 +23,11 @@ After cloning the repository, run the following command in "docs/" sub-folder:
     make html
 
 and then open the docs at docs/build/html/index.html.
+
+
+
+
+
+Notes (once resolved this will go to readme):
+
+1. no "class" parent of "subclass", if subclass is selected at later levels user is just meant to pick placeholder "subclass", as it won't affect low level leveling anyway (this means repetition in early levels for multiple sub-classes ...)
